@@ -27,8 +27,16 @@ CREATE TABLE IF NOT EXISTS Donation (
   id INTEGER PRIMARY KEY,
   date TEXT,
   amount REAL,
+  usd_equivalent REAL DEFAULT NULL,
   employee_id INTEGER,
   FOREIGN KEY (employee_id) REFERENCES Employee(id)
+);
+
+CREATE TABLE Rate (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT,
+  sign TEXT,
+  value REAL
 );
 
 --------------------------------------------------------------------------------
@@ -39,3 +47,4 @@ DROP TABLE Employee;
 DROP TABLE Department;
 DROP TABLE Salary;
 DROP TABLE Donation;
+DROP TABLE Rate;

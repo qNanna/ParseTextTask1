@@ -1,6 +1,7 @@
 export interface IDonation {
-  id: number,
-  date: Date,
-  amount: string,
-  employee_id: number
+  id: number;
+  date: Date;
+  amount: string;
+  usd_equivalent: string;
+  employee_id: number;
 }

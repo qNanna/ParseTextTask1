@@ -4,7 +4,7 @@ import * as sqlite3 from 'sqlite3';
 import * as fs from 'fs/promises';
 import { join } from 'path';
 
-import { IEmployee, IDepartment, ISalary, IDonation } from './interfaces/index';
+import { IEmployee, IDepartment, ISalary, IDonation, IRate } from './interfaces/index';
 
 class Database {
     private connection: sqlite.Database<sqlite3.Database, sqlite3.Statement> = null as any;
@@ -55,11 +55,23 @@ class Database {
     }
 
     async saveDonation(data: IDonation) {
-        await this.connection.run(`INSERT INTO Donation (id, date, amount, employee_id) VALUES (:id, :date, :amount, :employee_id)`, {
-            ':id': data.id,
-            ':amount': data.amount,
+        await this.connection.run(`
+            INSERT INTO Donation (id, date, amount, employee_id, usd_equivalent) 
+            VALUES (:id, :date, :amount, :employee_id, :usd_equivalent)`, {
+                ':id': data.id,
+                ':amount': data.amount,
+                ':date': data.date,
+                ':employee_id': data.employee_id,
+                ':usd_equivalent': data.usd_equivalent
+            }
+        );
+    }
+
+    async saveRate(data: IRate) {
+        await this.connection.run(`INSERT INTO Rate (date, sign, value) VALUES (:date, :sign, :value)`, {
             ':date': data.date,
-            ':employee_id': data.employee_id
+            ':sign': data.sign,
+            ':value': data.value
         });
     }
 }
