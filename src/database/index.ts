@@ -57,12 +57,15 @@ class Database {
     async saveDonation(data: IDonation) {
         await this.connection.run(`
             INSERT INTO Donation (id, date, amount, employee_id, usd_equivalent) 
-            VALUES (:id, :date, :amount, :employee_id, :usd_equivalent)`, {
+            SELECT :id, :date, :amount, :employee_id, ROUND((:amount / r.value), 2) AS usd_equivalent
+            FROM Rate r
+            WHERE r.date = :date
+            AND r.sign = SUBSTR(:amount, INSTR(:amount, ' ') + 1)
+            `, {
                 ':id': data.id,
                 ':amount': data.amount,
                 ':date': data.date,
                 ':employee_id': data.employee_id,
-                ':usd_equivalent': data.usd_equivalent
             }
         );
     }
